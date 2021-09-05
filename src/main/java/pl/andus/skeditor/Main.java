@@ -5,6 +5,9 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.*;
 
@@ -19,6 +22,8 @@ public class Main extends JFrame {
 
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
+        JMenu templateMenu = new JMenu("Templates");
+        JMenu themesMenu = new JMenu("Themes");
         JMenu helpMenu = new JMenu("Help");
 
         JMenuItem newF = new JMenuItem("New");
@@ -39,12 +44,24 @@ public class Main extends JFrame {
         editMenu.add(copy);
         editMenu.add(paste);
 
+        JMenuItem cmdTemp = new JMenuItem("Command");
+
+        templateMenu.add(cmdTemp);
+
+        JMenuItem lightTheme = new JMenuItem("Light");
+        JMenuItem darkTheme = new JMenuItem("Dark");
+
+        themesMenu.add(lightTheme);
+        themesMenu.add(darkTheme);
+
         JMenuItem about = new JMenuItem("About");
 
         helpMenu.add(about);
 
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
+        menuBar.add(templateMenu);
+        menuBar.add(themesMenu);
         menuBar.add(helpMenu);
 
         // Text Area
@@ -61,6 +78,9 @@ public class Main extends JFrame {
         cp.add(sp);
 
         SyntaxScheme scheme = textArea.getSyntaxScheme();
+        menuBar.setBackground(Color.white);
+        textArea.setBackground(Color.white);
+        textArea.setForeground(Color.black);
         scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
         scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
         scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
@@ -76,7 +96,9 @@ public class Main extends JFrame {
 
         newF.addActionListener(e -> new ShowDialog());
         open.addActionListener(e -> {
-            JFileChooser j = new JFileChooser("f:");
+            JFileChooser j = new JFileChooser("c:");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Skript Files (.sk)", "sk");
+            j.setFileFilter(filter);
 
             int r = j.showOpenDialog(null);
 
@@ -104,7 +126,7 @@ public class Main extends JFrame {
             }
         });
         save.addActionListener(e -> {
-            JFileChooser j = new JFileChooser("f:");
+            JFileChooser j = new JFileChooser("c:");
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Skript Files (.sk)", "sk");
             j.setFileFilter(filter);
 
@@ -135,6 +157,47 @@ public class Main extends JFrame {
         copy.addActionListener(e -> textArea.copy());
         paste.addActionListener(e -> textArea.paste());
 
+        cmdTemp.addActionListener(e -> textArea.insert("\n\ncommand /cmd:\n" +
+                "   description: Description of what this command does\n" +
+                "   usage: How to use the command, e.g. /cmd\n" +
+                "   permission: your.permission\n" +
+                "   permission message: &4You don't have permission to that command\n" +
+                "   executable by: players/console/players and console\n" +
+                "   aliases: /c, /command # list of all command aliases\n" +
+                "   trigger:" +
+                "       # what command should do" +
+                "       # e.g. 'send \"hello\" to player'. It will send message in Quote to player that sent the command.\n", textArea.getCaretPosition()));
+
+        lightTheme.addActionListener(e -> {
+            // menu
+            menuBar.setBackground(Color.white);
+            // textarea
+            textArea.setBackground(Color.white);
+            textArea.setForeground(Color.black);
+            // text
+            scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
+            scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
+            scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
+            scheme.getStyle(Token.DATA_TYPE).foreground = new Color(53, 154, 255);
+            scheme.getStyle(Token.OPERATOR).foreground = new Color(178, 51, 197);
+            scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.lightGray;
+        });
+
+        darkTheme.addActionListener(e -> {
+            // menu
+            menuBar.setBackground(Color.darkGray);
+            // textarea
+            textArea.setBackground(Color.darkGray);
+            textArea.setForeground(Color.white);
+            //text
+            scheme.getStyle(Token.RESERVED_WORD).foreground = new Color(53, 154, 255);
+            scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
+            scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
+            scheme.getStyle(Token.DATA_TYPE).foreground = new Color(53, 154, 255);
+            scheme.getStyle(Token.OPERATOR).foreground = new Color(178, 51, 197);
+            scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.lightGray;
+        });
+
         about.addActionListener(e -> new About());
     }
 
@@ -152,7 +215,7 @@ class ShowDialog {
                     dialogButton);
 
         if(dialogResult == JOptionPane.YES_OPTION) {
-            JFileChooser j = new JFileChooser("f:");
+            JFileChooser j = new JFileChooser("c:");
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Skript Files (.sk)", "sk");
             j.setFileFilter(filter);
 
