@@ -79,6 +79,7 @@ public class Main extends JFrame {
 
         SyntaxScheme scheme = textArea.getSyntaxScheme();
         menuBar.setBackground(Color.white);
+        textArea.setCurrentLineHighlightColor(new Color(255, 236, 121));
         textArea.setBackground(Color.white);
         textArea.setForeground(Color.black);
         scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
@@ -164,14 +165,15 @@ public class Main extends JFrame {
                 "   permission message: &4You don't have permission to that command\n" +
                 "   executable by: players/console/players and console\n" +
                 "   aliases: /c, /command # list of all command aliases\n" +
-                "   trigger:" +
-                "       # what command should do" +
+                "   trigger:\n" +
+                "       # what command should do\n" +
                 "       # e.g. 'send \"hello\" to player'. It will send message in Quote to player that sent the command.\n", textArea.getCaretPosition()));
 
         lightTheme.addActionListener(e -> {
             // menu
             menuBar.setBackground(Color.white);
             // textarea
+            textArea.setCurrentLineHighlightColor(new Color(255, 236, 121));
             textArea.setBackground(Color.white);
             textArea.setForeground(Color.black);
             // text
@@ -187,6 +189,7 @@ public class Main extends JFrame {
             // menu
             menuBar.setBackground(Color.darkGray);
             // textarea
+            textArea.setCurrentLineHighlightColor(Color.gray);
             textArea.setBackground(Color.darkGray);
             textArea.setForeground(Color.white);
             //text
