@@ -45,8 +45,10 @@ public class Main extends JFrame {
         editMenu.add(paste);
 
         JMenuItem cmdTemp = new JMenuItem("Command");
+        JMenuItem variablesTemp = new JMenuItem("Variables");
 
         templateMenu.add(cmdTemp);
+        templateMenu.add(variablesTemp);
 
         JMenuItem lightTheme = new JMenuItem("Light");
         JMenuItem darkTheme = new JMenuItem("Dark");
@@ -168,6 +170,13 @@ public class Main extends JFrame {
                 "   trigger:\n" +
                 "       # what command should do\n" +
                 "       # e.g. 'send \"hello\" to player'. It will send message in Quote to player that sent the command.\n", textArea.getCaretPosition()));
+
+        variablesTemp.addActionListener(e -> {
+            textArea.setCaretPosition(0);
+            textArea.insert("variables:\n" +
+                    "   {gvar} = 0 # Global Variable. You can change it's name in '{ }'. You can change value of it after '='\n" +
+                    "   {_lvar} = 0 # Local Variable. You can change it's name in '{_ }'. You can change value of it after '='\n", textArea.getCaretPosition());
+        });
 
         lightTheme.addActionListener(e -> {
             // menu
