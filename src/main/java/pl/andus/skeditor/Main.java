@@ -46,9 +46,20 @@ public class Main extends JFrame {
 
         JMenuItem cmdTemp = new JMenuItem("Command");
         JMenuItem variablesTemp = new JMenuItem("Variables");
+        JMenu onActTemp = new JMenu("On Action");
+
+        JMenuItem onDeathTemp = new JMenuItem("On death");
+        JMenuItem onJoinTemp = new JMenuItem("On join");
+        JMenuItem onFJoinTemp = new JMenuItem("On first join");
+        JMenuItem onLeaveTemp = new JMenuItem("On leave");
+        onActTemp.add(onDeathTemp);
+        onActTemp.add(onJoinTemp);
+        onActTemp.add(onFJoinTemp);
+        onActTemp.add(onLeaveTemp);
 
         templateMenu.add(cmdTemp);
         templateMenu.add(variablesTemp);
+        templateMenu.add(onActTemp);
 
         JMenuItem lightTheme = new JMenuItem("Light");
         JMenuItem darkTheme = new JMenuItem("Dark");
@@ -177,6 +188,21 @@ public class Main extends JFrame {
                     "   {gvar} = 0 # Global Variable. You can change it's name in '{ }'. You can change value of it after '='\n" +
                     "   {_lvar} = 0 # Local Variable. You can change it's name in '{_ }'. You can change value of it after '='\n", textArea.getCaretPosition());
         });
+
+        onDeathTemp.addActionListener(e -> textArea.insert("\n\non death of player:\n" +
+                "   if attacker is a player: # check if attacker is a player\n" +
+                "       broadcast \"&cPlayer &4&l%victim% &chas been killed by &a&l%attacker%\" # send message what player killed\n" +
+                "   else:\n" +
+                "       broadcast \"&cPlayer &4&l%victim% &cdied.\"\n", textArea.getCaretPosition()));
+
+        onJoinTemp.addActionListener(e -> textArea.insert("\n\non join:\n" +
+                "   broadcast \"&9Player &a&l%player% &9joined on the server\"\n", textArea.getCaretPosition()));
+
+        onFJoinTemp.addActionListener(e -> textArea.insert("\n\non first join:\n" +
+                "   broadcast \"&9Player &a&l&o%player% &9joined on server for the first time\"\n", textArea.getCaretPosition()));
+
+        onLeaveTemp.addActionListener(e -> textArea.insert("\n\non leave:\n" +
+                "   broadcast \"&9Player &c&l%player% &9left the server\"\n", textArea.getCaretPosition()));
 
         lightTheme.addActionListener(e -> {
             // menu

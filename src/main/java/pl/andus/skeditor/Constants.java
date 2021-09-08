@@ -1,5 +1,5 @@
 package pl.andus.skeditor;
 
 public class Constants {
-    static String version = "1.1";
+    static String version = "1.2";
 }
