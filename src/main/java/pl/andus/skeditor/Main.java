@@ -8,9 +8,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.*;
-import java.security.KeyStore;
 
 import static pl.andus.skeditor.Themes.*;
+import static pl.andus.skeditor.Utils.*;
 
 public class Main extends JFrame {
 
@@ -20,9 +20,10 @@ public class Main extends JFrame {
     static RTextScrollPane sp = new RTextScrollPane(textArea);
     static JPanel cp = new JPanel(new BorderLayout());
 
-    public Main() {
-        // Menu
+    public Main() throws IOException {
+        OnStart();
 
+        // Menu
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
         JMenu templateMenu = new JMenu("Templates");
@@ -229,7 +230,11 @@ public class Main extends JFrame {
                 String laf = UIManager.getSystemLookAndFeelClassName();
                 UIManager.setLookAndFeel(laf);
             } catch (Exception ignored) {}
-            new Main().setVisible(true);
+            try {
+                new Main().setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
