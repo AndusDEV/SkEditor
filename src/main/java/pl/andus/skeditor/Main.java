@@ -214,12 +214,24 @@ public class Main extends JFrame {
         onLeaveTemp.addActionListener(e -> textArea.insert("\n\non leave:\n" +
                 "   broadcast \"&9Player &c&l%player% &9left the server\"\n", textArea.getCaretPosition()));
 
-        lightTheme.addActionListener(e -> Light());
+        lightTheme.addActionListener(e -> {
+            Light();
+            //WriteTheme("light");
+        });
 
-        darkTheme.addActionListener(e -> Dark());
+        darkTheme.addActionListener(e -> {
+            Dark();
+            //WriteTheme("dark");
+        });
 
-        nSkyLight.addActionListener(e -> NightSky(false));
-        nSkyDark.addActionListener(e -> NightSky(true));
+        nSkyLight.addActionListener(e -> {
+            NightSky(false);
+            //WriteTheme("nsky-light");
+        });
+        nSkyDark.addActionListener(e -> {
+            NightSky(true);
+            //WriteTheme("nsky-dark");
+        });
 
         about.addActionListener(e -> new About());
     }

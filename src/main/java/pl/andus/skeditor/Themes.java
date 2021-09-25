@@ -1,12 +1,16 @@
 package pl.andus.skeditor;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
 
+import javax.swing.*;
 import java.awt.*;
 
 import static pl.andus.skeditor.Main.*;
 
 public class Themes {
+    final static ImageIcon nightSkyImg = new ImageIcon("night.png");
+
     public static void Light() {
         // menu
         menuBar.setBackground(Color.white);
