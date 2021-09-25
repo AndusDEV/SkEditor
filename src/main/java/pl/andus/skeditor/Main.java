@@ -1,24 +1,27 @@
 package pl.andus.skeditor;
 
+import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Highlighter;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.*;
+import java.security.KeyStore;
+
+import static pl.andus.skeditor.Themes.*;
 
 public class Main extends JFrame {
 
     static RSyntaxTextArea textArea = new RSyntaxTextArea(45, 150);
+    static JMenuBar menuBar = new JMenuBar();
+    static SyntaxScheme scheme = textArea.getSyntaxScheme();
+    static RTextScrollPane sp = new RTextScrollPane(textArea);
+    static JPanel cp = new JPanel(new BorderLayout());
 
     public Main() {
         // Menu
-
-        JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
@@ -63,9 +66,16 @@ public class Main extends JFrame {
 
         JMenuItem lightTheme = new JMenuItem("Light");
         JMenuItem darkTheme = new JMenuItem("Dark");
+        JMenu nSkyTheme = new JMenu("Night Sky");
+        JMenuItem nSkyLight = new JMenuItem("Light");
+        JMenuItem nSkyDark = new JMenuItem("Dark");
+
+        nSkyTheme.add(nSkyLight);
+        nSkyTheme.add(nSkyDark);
 
         themesMenu.add(lightTheme);
         themesMenu.add(darkTheme);
+        themesMenu.add(nSkyTheme);
 
         JMenuItem about = new JMenuItem("About");
 
@@ -82,19 +92,18 @@ public class Main extends JFrame {
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         atmf.putMapping("text/sk", "pl.andus.skeditor.sksyntax");
 
-        JPanel cp = new JPanel(new BorderLayout());
-
         textArea.setSyntaxEditingStyle("text/sk");
         textArea.setCodeFoldingEnabled(true);
         textArea.setHyperlinksEnabled(true);
-        RTextScrollPane sp = new RTextScrollPane(textArea);
         cp.add(sp);
 
-        SyntaxScheme scheme = textArea.getSyntaxScheme();
         menuBar.setBackground(Color.white);
         textArea.setCurrentLineHighlightColor(new Color(255, 236, 121));
         textArea.setBackground(Color.white);
         textArea.setForeground(Color.black);
+        CompletionProvider provider = createCompletionProvider();
+        AutoCompletion ac = new AutoCompletion(provider);
+        ac.install(textArea);
         scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
         scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
         scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
@@ -147,7 +156,7 @@ public class Main extends JFrame {
             int r = j.showSaveDialog(null);
 
             if (r == JFileChooser.APPROVE_OPTION) {
-                File fi = new File(j.getSelectedFile().getAbsolutePath());
+                File fi = new File(j.getSelectedFile().getAbsolutePath() + ".sk");
 
                 try {
                     FileWriter wr = new FileWriter(fi, false);
@@ -204,43 +213,38 @@ public class Main extends JFrame {
         onLeaveTemp.addActionListener(e -> textArea.insert("\n\non leave:\n" +
                 "   broadcast \"&9Player &c&l%player% &9left the server\"\n", textArea.getCaretPosition()));
 
-        lightTheme.addActionListener(e -> {
-            // menu
-            menuBar.setBackground(Color.white);
-            // textarea
-            textArea.setCurrentLineHighlightColor(new Color(255, 236, 121));
-            textArea.setBackground(Color.white);
-            textArea.setForeground(Color.black);
-            // text
-            scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
-            scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
-            scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
-            scheme.getStyle(Token.DATA_TYPE).foreground = new Color(53, 154, 255);
-            scheme.getStyle(Token.OPERATOR).foreground = new Color(178, 51, 197);
-            scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.lightGray;
-        });
+        lightTheme.addActionListener(e -> Light());
 
-        darkTheme.addActionListener(e -> {
-            // menu
-            menuBar.setBackground(Color.darkGray);
-            // textarea
-            textArea.setCurrentLineHighlightColor(Color.gray);
-            textArea.setBackground(Color.darkGray);
-            textArea.setForeground(Color.white);
-            //text
-            scheme.getStyle(Token.RESERVED_WORD).foreground = new Color(53, 154, 255);
-            scheme.getStyle(Token.RESERVED_WORD_2).foreground = Color.orange;
-            scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
-            scheme.getStyle(Token.DATA_TYPE).foreground = new Color(53, 154, 255);
-            scheme.getStyle(Token.OPERATOR).foreground = new Color(178, 51, 197);
-            scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.lightGray;
-        });
+        darkTheme.addActionListener(e -> Dark());
+
+        nSkyLight.addActionListener(e -> NightSky(false));
+        nSkyDark.addActionListener(e -> NightSky(true));
 
         about.addActionListener(e -> new About());
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Main().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            try {
+                String laf = UIManager.getSystemLookAndFeelClassName();
+                UIManager.setLookAndFeel(laf);
+            } catch (Exception ignored) {}
+            new Main().setVisible(true);
+        });
+    }
+
+    private CompletionProvider createCompletionProvider() {
+        DefaultCompletionProvider provider = new DefaultCompletionProvider();
+
+        provider.addCompletion(new ShorthandCompletion(provider, "cmd", "command:", "Command"));
+        provider.addCompletion(new BasicCompletion(provider, "if"));
+        provider.addCompletion(new BasicCompletion(provider, "else"));
+        provider.addCompletion(new BasicCompletion(provider, "trigger"));
+        provider.addCompletion(new BasicCompletion(provider, "permission"));
+        provider.addCompletion(new BasicCompletion(provider, "permission message"));
+        provider.addCompletion(new BasicCompletion(provider, "variables"));
+
+        return provider;
     }
 
 }
