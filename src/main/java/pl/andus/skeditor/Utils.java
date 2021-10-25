@@ -2,12 +2,12 @@ package pl.andus.skeditor;
 
 import java.io.*;
 
-//import static pl.andus.skeditor.Themes.*;
+import static pl.andus.skeditor.Themes.*;
 
 public class Utils {
     static String dirString = System.getProperty("user.home") + File.separator + "SkEditor";
     static File skDir = new File(dirString);
-    static String settingsPath = dirString + File.separator + "Settings.skedit";
+    static String settingsPath = dirString + File.separator + "settings.txt";
     static File settingsFile = new File(settingsPath);
 
     public static void OnStart() throws IOException {
@@ -36,7 +36,7 @@ public class Utils {
     }
 
     public static void WriteSettings() throws IOException {
-        String str = "Theme=light";
+        String str = "Theme: light";
         FileOutputStream outputStream = new FileOutputStream(settingsFile);
         byte[] strToBytes = str.getBytes();
         outputStream.write(strToBytes);
@@ -63,34 +63,38 @@ public class Utils {
     }
 
     //Themes work
+    public static void WriteTheme(String theme) throws IOException {
+        FileWriter fw = new FileWriter(settingsFile);
 
-    /*public static void WriteTheme(String theme) throws IOException {
-        String str = "Theme=" + theme;
-        FileOutputStream outputStream = new FileOutputStream(settingsFile);
-        byte[] strToBytes = str.getBytes();
-        outputStream.write(strToBytes);
+        for (int i = 0; i < 10; i++) {
+            fw.write("Theme: " + theme);
+        }
 
-        outputStream.close();
+        fw.close();
     }
 
-    public static void Theme(String theme) {
+    public static void Theme(String theme) throws IOException {
         if (theme.equalsIgnoreCase("light")) {
             Light();
+            WriteTheme("light");
             System.out.println("[Theme] Light");
         } else if (theme.equalsIgnoreCase("dark")) {
             Dark();
+            WriteTheme("dark");
             System.out.println("[Theme] Dark");
-        } else if (theme.equalsIgnoreCase("nsky-light")) {
-            NightSky(true);
-            System.out.println("[Theme] Night Sky (Light)");
-        } else if (theme.equalsIgnoreCase("nsky-dark")) {
-            NightSky(false);
-            System.out.println("[Theme] Night Sky (Dark)");
+        } else if (theme.equalsIgnoreCase("night-sky")) {
+            NightSky();
+            WriteTheme("night-sky");
+            System.out.println("[Theme] Night Sky");
+        } else if (theme.equalsIgnoreCase("metal")) {
+            Metalic();
+            WriteTheme("metal");
+            System.out.println("[Theme] Metalic");
         } else {
             Light();
             System.out.println("[Theme] Unknown Theme...");
             System.out.println("[Theme] Setting theme to default.");
         }
         System.out.println(theme);
-    }*/
+    }
 }

@@ -67,16 +67,15 @@ public class Main extends JFrame {
 
         JMenuItem lightTheme = new JMenuItem("Light");
         JMenuItem darkTheme = new JMenuItem("Dark");
-        JMenu nSkyTheme = new JMenu("Night Sky");
-        JMenuItem nSkyLight = new JMenuItem("Light");
-        JMenuItem nSkyDark = new JMenuItem("Dark");
-
-        nSkyTheme.add(nSkyLight);
-        nSkyTheme.add(nSkyDark);
+        JMenuItem nSkyTheme = new JMenuItem("Night Sky");
+        JMenuItem metalicTheme = new JMenuItem("Metalic");
+        JMenuItem laserLTheme = new JMenuItem("Laser Lemon");
 
         themesMenu.add(lightTheme);
         themesMenu.add(darkTheme);
         themesMenu.add(nSkyTheme);
+        themesMenu.add(metalicTheme);
+        themesMenu.add(laserLTheme);
 
         JMenuItem about = new JMenuItem("About");
 
@@ -214,24 +213,15 @@ public class Main extends JFrame {
         onLeaveTemp.addActionListener(e -> textArea.insert("\n\non leave:\n" +
                 "   broadcast \"&9Player &c&l%player% &9left the server\"\n", textArea.getCaretPosition()));
 
-        lightTheme.addActionListener(e -> {
-            Light();
-            //WriteTheme("light");
-        });
+        lightTheme.addActionListener(e -> Light());
 
-        darkTheme.addActionListener(e -> {
-            Dark();
-            //WriteTheme("dark");
-        });
+        darkTheme.addActionListener(e -> Dark());
 
-        nSkyLight.addActionListener(e -> {
-            NightSky(false);
-            //WriteTheme("nsky-light");
-        });
-        nSkyDark.addActionListener(e -> {
-            NightSky(true);
-            //WriteTheme("nsky-dark");
-        });
+        nSkyTheme.addActionListener(e -> NightSky());
+
+        metalicTheme.addActionListener(e -> Metalic());
+
+        laserLTheme.addActionListener(e -> LimeToYellow());
 
         about.addActionListener(e -> new About());
     }
