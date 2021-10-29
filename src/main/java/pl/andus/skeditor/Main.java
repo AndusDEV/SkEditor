@@ -70,12 +70,14 @@ public class Main extends JFrame {
         JMenuItem nSkyTheme = new JMenuItem("Night Sky");
         JMenuItem metalicTheme = new JMenuItem("Metalic");
         JMenuItem laserLTheme = new JMenuItem("Laser Lemon");
+        JMenuItem nineEightTheme = new JMenuItem("98");
 
         themesMenu.add(lightTheme);
         themesMenu.add(darkTheme);
         themesMenu.add(nSkyTheme);
         themesMenu.add(metalicTheme);
         themesMenu.add(laserLTheme);
+        themesMenu.add(nineEightTheme);
 
         JMenuItem about = new JMenuItem("About");
 
@@ -222,6 +224,8 @@ public class Main extends JFrame {
         metalicTheme.addActionListener(e -> Metalic());
 
         laserLTheme.addActionListener(e -> LimeToYellow());
+
+        nineEightTheme.addActionListener(e -> NineEight());
 
         about.addActionListener(e -> new About());
     }

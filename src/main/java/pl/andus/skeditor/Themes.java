@@ -3,6 +3,8 @@ package pl.andus.skeditor;
 import org.fife.ui.rsyntaxtextarea.Token;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -10,9 +12,11 @@ import java.io.IOException;
 import static pl.andus.skeditor.Main.*;
 
 public class Themes {
+
     static BufferedImage nightSkyImg = null;
     static BufferedImage metalImg = null;
     static BufferedImage laserLemonImg = null;
+    static BufferedImage neImg = null;
 
     public static void Light() {
         // menu
@@ -56,7 +60,7 @@ public class Themes {
         }
 
         // menu
-        menuBar.setBackground(Color.white);
+        menuBar.setBackground(new Color(0, 77, 168));
         // textarea
         textArea.setBackgroundImage(nightSkyImg);
         textArea.setCurrentLineHighlightColor(new Color(0, 118, 255, 161));
@@ -104,6 +108,28 @@ public class Themes {
         // textarea
         textArea.setBackgroundImage(laserLemonImg);
         textArea.setCurrentLineHighlightColor(new Color(136, 245, 119, 142));
+        textArea.setForeground(Color.black);
+        // text
+        scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
+        scheme.getStyle(Token.RESERVED_WORD_2).foreground = new Color(255, 0, 0);
+        scheme.getStyle(Token.COMMENT_KEYWORD).foreground = Color.magenta;
+        scheme.getStyle(Token.DATA_TYPE).foreground = new Color(31, 140, 255);
+        scheme.getStyle(Token.OPERATOR).foreground = new Color(231, 80, 255);
+        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = Color.lightGray;
+    }
+
+    public static void NineEight() {
+        try {
+            neImg = ImageIO.read(Themes.class.getClassLoader().getResourceAsStream("themes/98.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // menu
+        menuBar.setBackground(new Color(0, 125, 121));
+        // textarea
+        textArea.setBackgroundImage(neImg);
+        textArea.setCurrentLineHighlightColor(new Color(0, 125, 160, 165));
         textArea.setForeground(Color.black);
         // text
         scheme.getStyle(Token.RESERVED_WORD).foreground = Color.blue;
